@@ -69,7 +69,7 @@ class NewVisitorTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url)
 		page_text = self.browser.find_element_by_tag_name('body').text
 		self.assertNotIn('공작깃털 사기', page_text)
-		self.aseertNotIn('그물 만들기', page_text)
+		self.assertNotIn('그물 만들기', page_text)
 
 		# 프란시스가 새로운 작업 아이템을 입력하기 시작한다
 		# 그는 에디스보다 재미가 없다
@@ -79,7 +79,7 @@ class NewVisitorTest(LiveServerTestCase):
 
 		# 프란시스가 전용 URL을 취득한다
 		francis_list_url = self.browser.current_url
-		self.assertRegex(francis_list_rul, '/lists/.+')
+		self.assertRegex(francis_list_url, '/lists/.+')
 		self.assertNotEqual(francis_list_url, edith_list_url)
 
 		# 에디스가 입력한 흔적이 없다는 것을 다시 확인한다
