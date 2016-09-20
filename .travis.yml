@@ -2,6 +2,6 @@ lnguage: python
 python:
   - "3.5"
 # command to install dependencies
-install: "pip3 install -r requirements.txt"
+install: "pip install -r requirements.txt"
 # command to run tests
-script: python3 manage.py runserver && python3 manage.py test functional_tests/
+script: python manage.py runserver && python manage.py test functional_tests/
