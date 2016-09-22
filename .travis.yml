@@ -2,7 +2,7 @@ lnguage: python
 python:
   - "3.5"
 # command to install dependencies
-install: "sudo pip3 install -r requirements.txt"
+install: "sudo pip install -r requirements.txt"
 # command to run tests
-script: python3 manage.py test functional_tests --liveserver=ec2-52-78-45-29.ap-northeast-2.compute.amazonaws.com 
+script: python manage.py test functional_tests --liveserver=ec2-52-78-45-29.ap-northeast-2.compute.amazonaws.com 
 sudo: required
