@@ -1,11 +1,13 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from lists.models import Item, List
 from django.views.decorators.csrf import csrf_exempt
+
+from lists.models import Item, List
+from lists.forms import ItemForm
 
 @csrf_exempt
 def home_page(request):
-	return render(request, 'home.html')
+	return render(request, 'home.html', {'form': ItemForm()})
 
 @csrf_exempt
 def view_list(request, list_id):
