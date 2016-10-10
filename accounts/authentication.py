@@ -1,4 +1,8 @@
-class PersonaAuthenticationsBackend(object):
+import requests
+import sys
+from accounts.models import ListUser
+
+class PersonaAuthenticationBackend(object):
     
     def authenticate(self, assertion):
         # 어설션을 모질라의 증명 서비스로 전송

@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>To-Do lists</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/base.css" rel="stylesheet" media="screen">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/base.css" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="static/lists.js"></script>
     <script src="https://login.persona.org/include.js"></script>
     <script>
         $(document).ready(function(){
-            var loginLink = document.getElementById('login');
+            var loginLink = document.getElementById('id_login');
             if(loginLink){
                 loginLink.onclick = function(){ navigator.id.request(); }
             }
-            var logoutLink = document.getElementById('logout');
+            var logoutLink = document.getElementById('id_logout');
             if(logoutLink){
                 logoutLink.onclick = function(){ navigator.id.logout(); }
             }
             var currentUser = '{{ user.email }}' || null;
-            var csrf_token = '{{ csrf_token }}' || null;
+            var csrf_token = '{{ csrf_token }}';
             console.log(currentUser);
+
             navigator.id.watch({
                 loggedInUser: currentUser,
                 onlogin: function(assertion){
                     $.post('/accounts/login', {
                         assertion: assertion,
-                        csrfmiddlewaretoken: csrf_token
-                    }).done(function(){
-                        window.location.reload();
-                    }).fail(function(){
-                        navigator.id.logout();
-                    })
+                        csrfmiddlewaretoken: csrf_token})
+                    .done(function(){ window.location.reload(); })
+                    .fail(function(){ navigator.id.logout(); })
                 },
                 onlogout: function(){
                     $.post('/accounts/logout').always(function(){
@@ -41,42 +44,47 @@
             });
         });
     </script>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="navbar">
+<div class="container">
+
+    <div class="navbar navbar-default" role="navigation">
             {% if user.email %}
                 <p>로그인 상태 {{ user.email }}</p>
-                <p><a href="{% url 'logout' %}" id="logout">로그아웃</a></p>
+                <p><a id="id_logout" href="{% url 'logout' %}" >로그아웃</a></p>
             {% else %}
-                <a href="#" id="login">로그인</a>
+                <a href="#" id="id_login">로그인</a>
             {% endif %}
             <p>사용자 : {{ user }}</p>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3 jumbotron">
-                <div class="text-center">
-                    <h1>{% block header_text %} {% endblock %}</h1>
-                    <form method="POST" action="{% block form_action %}{% endblock %}" novalidate>
-                        {{ form.text }}
-                        {% csrf_token %}
-                        {% if form.errors %}
-                            <div class="form-group has-error">
-                                <span class="help-block">{{ form.text.errors }}</span>
-                            </div>
-                        {% endif %}
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                {% block table %}
-                {% endblock %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 jumbotron">
+            <div class="text-center">
+                <h1>{% block header_text %}{% endblock %}</h1>
+                <form method="POST" action="{% block form_action %}{% endblock %}">
+                    {{ form.text }}
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="form-group has-error">
+                            <div class="help-block">{{ form.text.errors }}</div>
+                        </div>
+                    {% endif %}
+                </form>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            {% block table %}
+            {% endblock %}
+        </div>
+    </div>
+
+</div>
 </body>
+
 </html>
